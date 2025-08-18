@@ -4,7 +4,7 @@
 
 ;; Author: Tamas Papp <tkpapp@gmail.com>
 ;; Keywords: convenience
-;; Version: 0.1.0
+;; Version: 0.1.1
 ;; Package-Requires: ((emacs "29.1"))
 ;; URL: https://github.com/tpapp/keepachangelog
 ;;
@@ -36,7 +36,7 @@
 (defun changelog-open ()
   "Find a `CHANGELOG.md' file in one of the parent directories, starting with the directory of the current file."
   (interactive)
-  (let* ((this-fn (buffer-file-name))
+  (let* ((this-fn (or (buffer-file-name) default-directory))
          (changelog-fn "CHANGELOG.md")
          (changelog-dir (locate-dominating-file this-fn changelog-fn)))
     (if changelog-dir
@@ -82,7 +82,7 @@ Follows the guidelines at URL `https://keepachangelog.com/en/1.1.0/'."
                                       (changelog-insert-unreleased)))
     (keymap-local-set "C-c C-e C-u" 'changelog-insert-unreleased)))
 
-(global-set-key (kbd "C-c C-l C-o") 'changelog-open)
+(keymap-global-set "C-c C-l C-o" 'changelog-open)
 
 (add-hook 'find-file-hook 'changelog--setup-keys)
 
