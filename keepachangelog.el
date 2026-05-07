@@ -4,7 +4,7 @@
 
 ;; Author: Tamas Papp <tkpapp@gmail.com>
 ;; Keywords: convenience
-;; Version: 0.1.1
+;; Version: 0.1.2
 ;; Package-Requires: ((emacs "29.1"))
 ;; URL: https://github.com/tpapp/keepachangelog
 ;;
@@ -75,12 +75,13 @@ Follows the guidelines at URL `https://keepachangelog.com/en/1.1.0/'."
 ")))
 
 (defun changelog--setup-keys ()
-  (when (string= (file-name-nondirectory (buffer-file-name)) "CHANGELOG.md")
-    (keymap-local-set "C-c C-e C-a" (lambda ()
-                                      (interactive)
-                                      (changelog-insert-header)
-                                      (changelog-insert-unreleased)))
-    (keymap-local-set "C-c C-e C-u" 'changelog-insert-unreleased)))
+  (let ((buffer-fn (buffer-file-name)))
+    (when (and buffer-fn (string= (file-name-nondirectory buffer-fn) "CHANGELOG.md"))
+      (keymap-local-set "C-c C-e C-a" (lambda ()
+                                        (interactive)
+                                        (changelog-insert-header)
+                                        (changelog-insert-unreleased)))
+      (keymap-local-set "C-c C-e C-u" 'changelog-insert-unreleased))))
 
 (keymap-global-set "C-c C-l C-o" 'changelog-open)
 
